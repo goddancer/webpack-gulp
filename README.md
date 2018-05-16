@@ -59,3 +59,5 @@ gulp.task('default', function() {
     .pipe(gulp.dest('./test/demo/dist/'));
 });
 ```
+---
+https://github.com/gulpjs/gulp-util
