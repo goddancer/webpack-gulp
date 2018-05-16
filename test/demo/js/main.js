@@ -1,5 +1,7 @@
 import {HttpUtil} from '../../../library/js/utils/httpUtil';
 import '../css/index.scss';
+import '../component/layer.html';
+import '../css/index.less';
 
 function hello(){
   const time = new Date().getHours();

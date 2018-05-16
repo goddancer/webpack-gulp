@@ -57,181 +57,14 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__library_js_utils_httpUtil__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_index_scss__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_index_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_index_scss__);
-
-
-
-function hello() {
-  const time = new Date().getHours();
-  const str = `now the time of hour is ${time}`;
-  console.log('hello webpack-stream!');
-  console.log(str);
-}
-hello();
-
-// const newUrl = HttpUtil.updateParam(window.location.url, 'goddancer', 123);
-const name = __WEBPACK_IMPORTED_MODULE_0__library_js_utils_httpUtil__["a" /* HttpUtil */].getParam('name');
-console.log(name);
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class HttpUtil {
-  /**
-   *  HttpUtil 静态工具类，包含对url地址，参数的一些常用方法
-   */
-  constructor() {}
-
-  /**
-   *  根据参数名称获取url地址中的参数
-   *  @param name {String} name url参数的名称
-   *  @return {string} 返回获取到的参数值，如果没有返回NULL
-   */
-  static getParam(name) {
-    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) {
-      return unescape(r[2]);
-    }
-    return null;
-  }
-
-  /**
-   *  根据参数名称更新url地址中的参数
-   *  @param url {String} url 浏览器当前地址
-   *  @param name {String} name url参数的名称
-   *  @param value {String} value url参数的值
-   *  @return {string} 返回更新参数值后的新的地址，如果没有返回原地址
-   */
-  static updateParam(url, name, value) {
-    var r = url;
-    if (r != null && r != 'undefined' && r != '') {
-      //value = encodeURIComponent(value);
-      var reg = new RegExp("(^|)" + name + "=([^&]*)(|$)");
-      var tmp = name + "=" + value;
-      if (url.match(reg) != null) {
-        r = url.replace(eval(reg), tmp);
-      } else {
-        if (url.match("[\?]")) {
-          r = url + "&" + tmp;
-        } else {
-          r = url + "?" + tmp;
-        }
-      }
-    }
-    return r;
-  }
-  /**
-   *  在head标签里添加script标签，用于动态获取脚本
-   *  @param link {String} link 远程URL地址
-   *  @param callback {Function} callback 回调函数
-   */
-  static addScript(link, callback) {
-    var el = document.createElement("script");
-    el.type = "text/javascript";
-    el.lang = "javascript";
-    if (el.readyState) {
-      el.onreadystatechange = function () {
-        if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-          el.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else {
-      el.onload = function () {
-        callback();
-      };
-    }
-    el.src = link;
-    document.getElementsByTagName("body")[0].appendChild(el);
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = HttpUtil;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(3);
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(5)(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {
-	module.hot.accept("!!../../../node_modules/_css-loader@0.28.11@css-loader/index.js!../../../node_modules/_postcss-loader@2.1.5@postcss-loader/lib/index.js??ref--1-2!../../../node_modules/_sass-loader@7.0.1@sass-loader/lib/loader.js!./index.scss", function() {
-		var newContent = require("!!../../../node_modules/_css-loader@0.28.11@css-loader/index.js!../../../node_modules/_postcss-loader@2.1.5@postcss-loader/lib/index.js??ref--1-2!../../../node_modules/_sass-loader@7.0.1@sass-loader/lib/loader.js!./index.scss");
-
-		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-
-		var locals = (function(a, b) {
-			var key, idx = 0;
-
-			for(key in a) {
-				if(!b || a[key] !== b[key]) return false;
-				idx++;
-			}
-
-			for(key in b) idx--;
-
-			return idx === 0;
-		}(content.locals, newContent.locals));
-
-		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
-
-		update(newContent);
-	});
-
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)(false);
-// imports
-
-
-// module
-exports.push([module.i, "html, body {\n  padding: 0;\n  margin: 0; }\n\ndiv {\n  display: -ms-flexbox;\n  display: flex; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -239,14 +72,14 @@ exports.push([module.i, "html, body {\n  padding: 0;\n  margin: 0; }\n\ndiv {\n 
 	Author Tobias Koppers @sokra
 */
 // css base code, injected by the css-loader
-module.exports = function (useSourceMap) {
+module.exports = function(useSourceMap) {
 	var list = [];
 
 	// return the list of modules as css string
 	list.toString = function toString() {
 		return this.map(function (item) {
 			var content = cssWithMappingToString(item, useSourceMap);
-			if (item[2]) {
+			if(item[2]) {
 				return "@media " + item[2] + "{" + content + "}";
 			} else {
 				return content;
@@ -255,23 +88,25 @@ module.exports = function (useSourceMap) {
 	};
 
 	// import a list of modules into the list
-	list.i = function (modules, mediaQuery) {
-		if (typeof modules === "string") modules = [[null, modules, ""]];
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
 		var alreadyImportedModules = {};
-		for (var i = 0; i < this.length; i++) {
+		for(var i = 0; i < this.length; i++) {
 			var id = this[i][0];
-			if (typeof id === "number") alreadyImportedModules[id] = true;
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
 		}
-		for (i = 0; i < modules.length; i++) {
+		for(i = 0; i < modules.length; i++) {
 			var item = modules[i];
 			// skip already imported module
 			// this implementation is not 100% perfect for weird media query combinations
 			//  when a module is imported multiple times with different media queries.
 			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if (mediaQuery && !item[2]) {
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
 					item[2] = mediaQuery;
-				} else if (mediaQuery) {
+				} else if(mediaQuery) {
 					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
 				}
 				list.push(item);
@@ -291,7 +126,7 @@ function cssWithMappingToString(item, useSourceMap) {
 	if (useSourceMap && typeof btoa === 'function') {
 		var sourceMapping = toComment(cssMapping);
 		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
 		});
 
 		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
@@ -309,8 +144,9 @@ function toComment(sourceMap) {
 	return '/*# ' + data + ' */';
 }
 
+
 /***/ }),
-/* 5 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -696,6 +532,198 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _httpUtil = __webpack_require__(3);
+
+__webpack_require__(4);
+
+__webpack_require__(7);
+
+__webpack_require__(8);
+
+function hello() {
+  var time = new Date().getHours();
+  var str = 'now the time of hour is ' + time;
+  console.log('hello webpack-stream!');
+  console.log(str);
+}
+hello();
+
+// const newUrl = HttpUtil.updateParam(window.location.url, 'goddancer', 123);
+var name = _httpUtil.HttpUtil.getParam('name');
+console.log(name);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var HttpUtil = exports.HttpUtil = function () {
+  /**
+   *  HttpUtil 静态工具类，包含对url地址，参数的一些常用方法
+   */
+  function HttpUtil() {
+    _classCallCheck(this, HttpUtil);
+  }
+
+  /**
+   *  根据参数名称获取url地址中的参数
+   *  @param name {String} name url参数的名称
+   *  @return {string} 返回获取到的参数值，如果没有返回NULL
+   */
+
+
+  _createClass(HttpUtil, null, [{
+    key: 'getParam',
+    value: function getParam(name) {
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) {
+        return unescape(r[2]);
+      }
+      return null;
+    }
+
+    /**
+     *  根据参数名称更新url地址中的参数
+     *  @param url {String} url 浏览器当前地址
+     *  @param name {String} name url参数的名称
+     *  @param value {String} value url参数的值
+     *  @return {string} 返回更新参数值后的新的地址，如果没有返回原地址
+     */
+
+  }, {
+    key: 'updateParam',
+    value: function updateParam(url, name, value) {
+      var r = url;
+      if (r != null && r != 'undefined' && r != '') {
+        //value = encodeURIComponent(value);
+        var reg = new RegExp("(^|)" + name + "=([^&]*)(|$)");
+        var tmp = name + "=" + value;
+        if (url.match(reg) != null) {
+          r = url.replace(eval(reg), tmp);
+        } else {
+          if (url.match("[\?]")) {
+            r = url + "&" + tmp;
+          } else {
+            r = url + "?" + tmp;
+          }
+        }
+      }
+      return r;
+    }
+    /**
+     *  在head标签里添加script标签，用于动态获取脚本
+     *  @param link {String} link 远程URL地址
+     *  @param callback {Function} callback 回调函数
+     */
+
+  }, {
+    key: 'addScript',
+    value: function addScript(link, callback) {
+      var el = document.createElement("script");
+      el.type = "text/javascript";
+      el.lang = "javascript";
+      if (el.readyState) {
+        el.onreadystatechange = function () {
+          if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+            el.onreadystatechange = null;
+            callback();
+          }
+        };
+      } else {
+        el.onload = function () {
+          callback();
+        };
+      }
+      el.src = link;
+      document.getElementsByTagName("body")[0].appendChild(el);
+    }
+  }]);
+
+  return HttpUtil;
+}();
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(5);
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(1)(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {
+	module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/postcss-loader/lib/index.js??ref--1-2!../../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
+		var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/postcss-loader/lib/index.js??ref--1-2!../../../node_modules/sass-loader/lib/loader.js!./index.scss");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0; }\n\ndiv {\n  display: -ms-flexbox;\n  display: flex; }\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -714,63 +742,64 @@ function updateLink (link, options, obj) {
  */
 
 module.exports = function (css) {
-	// get current location
-	var location = typeof window !== "undefined" && window.location;
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
 
-	if (!location) {
-		throw new Error("fixUrls requires window.location");
-	}
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
 
 	// blank or null?
 	if (!css || typeof css !== "string") {
-		return css;
-	}
+	  return css;
+  }
 
-	var baseUrl = location.protocol + "//" + location.host;
-	var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
 
 	// convert each url(...)
 	/*
- This regular expression is just a way to recursively match brackets within
- a string.
- 	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-    (  = Start a capturing group
-      (?:  = Start a non-capturing group
-          [^)(]  = Match anything that isn't a parentheses
-          |  = OR
-          \(  = Match a start parentheses
-              (?:  = Start another non-capturing groups
-                  [^)(]+  = Match anything that isn't a parentheses
-                  |  = OR
-                  \(  = Match a start parentheses
-                      [^)(]*  = Match anything that isn't a parentheses
-                  \)  = Match a end parentheses
-              )  = End Group
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
               *\) = Match anything and then a close parens
           )  = Close non-capturing group
           *  = Match anything
        )  = Close capturing group
-  \)  = Match a close parens
- 	 /gi  = Get all matches, not the first.  Be case insensitive.
-  */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function (fullMatch, origUrl) {
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
 		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl.trim().replace(/^"(.*)"$/, function (o, $1) {
-			return $1;
-		}).replace(/^'(.*)'$/, function (o, $1) {
-			return $1;
-		});
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
 
 		// already a full url? no change
 		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
-			return fullMatch;
+		  return fullMatch;
 		}
 
 		// convert the url to a full url
 		var newUrl;
 
 		if (unquotedOrigUrl.indexOf("//") === 0) {
-			//TODO: should we add protocol?
+		  	//TODO: should we add protocol?
 			newUrl = unquotedOrigUrl;
 		} else if (unquotedOrigUrl.indexOf("/") === 0) {
 			// path should be relative to the base url
@@ -787,6 +816,106 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>\r\n  <meta http-equiv=\"Expires\" content=\"0\">\r\n  <meta http-equiv=\"Pragma\" content=\"no-cache\">\r\n  <meta http-equiv=\"Cache-control\" content=\"no-cache\">\r\n  <meta http-equiv=\"Cache\" content=\"no-cache\">\r\n  <title></title>\r\n</head>\r\n<body>\r\n<div id=\"layer\">\r\n  this is a layer html\r\n</div>\r\n<script>\r\n  document.documentElement.style.fontSize = document.documentElement.clientWidth / 18.75 + 'px';\r\n  window.onresize = function () {\r\n    document.documentElement.style.fontSize = document.documentElement.clientWidth / 18.75 + 'px';\r\n  }\r\n</script>\r\n<!-- Gridsum tracking code begin. -->\r\n<script type='text/javascript'>\r\n  var _gsq = _gsq || [];\r\n  (function () {\r\n    var s = document.createElement('script');\r\n    s.type = 'text/javascript';\r\n    s.async = true;\r\n    s.src = 'http://app.cntv.cn/special/gridsum/GWD-002971-160517/gs.js';\r\n    var firstScript = document.getElementsByTagName('script')[0];\r\n    firstScript.parentNode.insertBefore(s, firstScript);\r\n  })();\r\n</script>\r\n<!--Gridsum tracking code end. -->\r\n<!--baidu tracking code begin. -->\r\n<script type='text/javascript'>\r\n  var _hmt = _hmt || [];\r\n  (function () {\r\n    var hm = document.createElement(\"script\");\r\n    hm.src = \"//hm.baidu.com/hm.js?019794186c954b4b5c8cfa41f0b572ae\";\r\n    var s = document.getElementsByTagName(\"script\")[0];\r\n    s.parentNode.insertBefore(hm, s);\r\n  })();\r\n</script>\r\n<!--baidu tracking code end. -->\r\n</body>\r\n</html>";
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(9);
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(1)(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {
+	module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/postcss-loader/lib/index.js??ref--4-2!../../../node_modules/less-loader/dist/cjs.js!./index.less", function() {
+		var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/postcss-loader/lib/index.js??ref--4-2!../../../node_modules/less-loader/dist/cjs.js!./index.less");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var escape = __webpack_require__(10);
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "body {\n  width: 100%;\n  height: 100%;\n  font-size: 1rem;\n  background: url(" + escape(__webpack_require__(11)) + ") no-repeat center top;\n}\ndiv {\n  display: -ms-flexbox;\n  display: flex;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = function escape(url) {
+    if (typeof url !== 'string') {
+        return url
+    }
+    // If url is already wrapped in quotes, remove them
+    if (/^['"].*['"]$/.test(url)) {
+        url = url.slice(1, -1);
+    }
+    // Should url be wrapped?
+    // See https://drafts.csswg.org/css-values-3/#urls
+    if (/["'() \t\n]/.test(url)) {
+        return '"' + url.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"'
+    }
+
+    return url
+}
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "img/bg-31b64.jpg";
 
 /***/ })
 /******/ ]);
