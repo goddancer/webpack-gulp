@@ -1,6 +1,8 @@
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const uglify = require('uglifyjs-webpack-plugin');
+
 gulp.task('default', function() {
   return gulp.src('src/entry.js')
     .pipe(webpack({
@@ -17,11 +19,32 @@ gulp.task('default', function() {
         loaders: [
           {
             test: /\.css$/,
-            loader: 'style-loader!css-loader'
+            loaders: ['style-loader', {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                indent: 'poscss',
+                plugins: (loader) => [
+                  require('postcss-import')({root: loader.resourcePath}),
+                  require('autoprefixer')({
+                    broswer: ['last 5 versions']
+                  })
+                ]
+              }
+            }]
           },
           {
             test: /\.scss$/,
-            loaders: ['style-loader', 'css-loader', {
+            loaders: ['style-loader', {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }, {
               loader: 'postcss-loader',
               options: {
                 indent: 'poscss',
@@ -48,7 +71,12 @@ gulp.task('default', function() {
           },
           {
             test: /\.less$/,
-            loaders: ['style-loader', 'css-loader', {
+            loaders: ['style-loader', {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }, {
               loader: 'postcss-loader',
               options: {
                 indent: 'poscss',
@@ -91,6 +119,9 @@ gulp.task('default', function() {
             collapseWhitespace: true,
             collapseInlineTagWhitespace: true,
           }
+        }),
+        new uglify({
+          extractComments: true
         })
       ]
     }))

@@ -5,6 +5,7 @@ import '../css/index.less';
 import $ from 'jquery';
 import Vue from 'vue';
 import SlideBarrage from '../../../library/components/slideBarrage/sildeBarrage';
+import '../css/base.css';
 
 function hello(){
   const time = new Date().getHours();

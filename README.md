@@ -108,34 +108,6 @@ npm install image-webpack-loader --save-dev // url-loader的limit计算会根据
     }
 }
 ```
-#### html-webpack-plugin
-实现：
-1）js输出物的自动添加
-
-2）依赖chunk的指定引用（参考webpack-test branch-loader README [传送门](https://github.com/goddancer/webpack-test/tree/loader)）
-
-3）基于ejs模板引擎语法的支持，伪后端输出。
-
-4）html压缩（注释，空格等）
-```
-npm install html-webpack-plugin --save-dev
-
-plugins: [
-    new htmlWebpackPlugin({
-      filename: 'index.html', // 输出目录基准
-      template: './test/demo/index.ejs', // 解析目录基准
-      inject: 'body',
-      title: 'goddancer is awesome',
-      minify: {
-        removeComments: true, // 移除注释
-        collapseWhitespace: true, // 移除空格
-        collapseInlineTagWhitespace: true, // 移除标签行间空格
-      }
-    })
-]
-
-<%= htmlWebpackPlugin.options.title %> // ejs
-```
 #### html-loader
 ```
 npm install html-loader --save-dev
@@ -174,7 +146,49 @@ resolve: {
     extensions: ['.ts', '.vue', '.js'] // 指定解析拓展
 }
 ```
-### 3、创建gulpfile.js并初始化
+### 3、plugins
+#### html-webpack-plugin
+实现：
+1）js输出物的自动添加
+
+2）依赖chunk的指定引用（参考webpack-test branch-loader README [传送门](https://github.com/goddancer/webpack-test/tree/loader)）
+
+3）基于ejs模板引擎语法的支持，伪后端输出。
+
+4）html压缩（注释，空格等）
+```
+npm install html-webpack-plugin --save-dev
+
+plugins: [
+    new htmlWebpackPlugin({
+      filename: 'index.html', // 输出目录基准
+      template: './test/demo/index.ejs', // 解析目录基准
+      inject: 'body',
+      title: 'goddancer is awesome',
+      minify: {
+        removeComments: true, // 移除注释
+        collapseWhitespace: true, // 移除空格
+        collapseInlineTagWhitespace: true, // 移除标签行间空格
+      }
+    })
+]
+
+<%= htmlWebpackPlugin.options.title %> // ejs
+```
+#### uglifyjs-webpack-plugin
+webpack自带js压缩工具，如果未找到，手动安装。
+```
+npm install uglifyjs-webpack-plugin --save-dev
+
+const uglify = require('uglifyjs-webpack-plugin');
+
+plugins: [
+    new uglify({
+      extractComments: true // 删除注释
+    })
+]
+```
+### 4、创建gulpfile.js并初始化
 ```
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
@@ -201,7 +215,7 @@ gulp.task('default', function() {
     .pipe(gulp.dest('./test/demo/dist/'));
 });
 ```
-### 4、eslint
+### 5、eslint
 ```
 ```
 ### END、完整任务配置
@@ -209,102 +223,132 @@ gulp.task('default', function() {
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
 const htmlWebpackPlugin = require('html-webpack-plugin');
+const uglify = require('uglifyjs-webpack-plugin');
 
 gulp.task('default', function() {
-    return gulp.src('src/entry.js')
-      .pipe(webpack({
-        watch: false,
-        entry: {
-          app: './test/demo/js/main.js',
-          // test: 'test/test.js',
-        },
-        output: {
-          filename: 'js/[name].js',
-          publicPath: './'
-        },
-        module: {
-          loaders: [
-            {
-              test: /\.css$/,
-              loader: 'style-loader!css-loader'
-            },
-            {
-              test: /\.scss$/,
-              loaders: ['style-loader', 'css-loader', {
-                loader: 'postcss-loader',
-                options: {
-                  indent: 'poscss',
-                  plugins: (loader) => [
-                    require('postcss-import')({root: loader.resourcePath}),
-                    require('autoprefixer')({
-                      broswer: ['last 5 versions']
-                    })
-                  ]
-                }
-              }, 'sass-loader']
-            },
-            {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loader: 'babel-loader',
+  return gulp.src('src/entry.js')
+    .pipe(webpack({
+      watch: false,
+      entry: {
+        app: './test/demo/js/main.js',
+        // test: 'test/test.js',
+      },
+      output: {
+        filename: 'js/[name].js',
+        publicPath: './'
+      },
+      module: {
+        loaders: [
+          {
+            test: /\.css$/,
+            loaders: ['style-loader', {
+              loader: 'css-loader',
               options: {
-                "presets": ['env']
+                minimize: true // 压缩css到一行
               }
-            },
-            {
-              test: /\.html$/,
-              loader: 'html-loader'
-            },
-            {
-              test: /\.less$/,
-              loaders: ['style-loader', 'css-loader', {
-                loader: 'postcss-loader',
-                options: {
-                  indent: 'poscss',
-                  plugins: (loader) => [
-                    require('postcss-import')({root: loader.resourcePath}),
-                    require('autoprefixer')({
-                      broswer: ['last 5 versions']
-                    })
-                  ]
-                }
-              }, 'less-loader']
-            },
-            {
-              test: /\.(png|jpe?g|gif|svg)$/i,
-              loaders: [
-                'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
-                'image-webpack-loader'
-              ]
-            },
-            {
-              test: /\.vue$/,
-              loader: 'vue-loader'
-            }
-          ],
-        },
-        resolve: {
-          alias: {
-            vue: 'vue/dist/vue.js'
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                indent: 'poscss',
+                plugins: (loader) => [
+                  require('postcss-import')({root: loader.resourcePath}),
+                  require('autoprefixer')({
+                    broswer: ['last 5 versions']
+                  })
+                ]
+              }
+            }]
           },
-          extensions: ['.ts', '.vue', '.js']
-        },
-        plugins: [
-          new htmlWebpackPlugin({
-            filename: 'index.html',
-            template: './test/demo/index.ejs',
-            inject: 'body',
-            title: 'goddancer is awesome',
-            minify: {
-              removeComments: true,
-              collapseWhitespace: true,
-              collapseInlineTagWhitespace: true,
+          {
+            test: /\.scss$/,
+            loaders: ['style-loader', {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                indent: 'poscss',
+                plugins: (loader) => [
+                  require('postcss-import')({root: loader.resourcePath}),
+                  require('autoprefixer')({
+                    broswer: ['last 5 versions']
+                  })
+                ]
+              }
+            }, 'sass-loader']
+          },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+              "presets": ['env']
             }
-          })
-        ]
-      }))
-      .pipe(gulp.dest('./test/demo/dist/'));
-  });
+          },
+          {
+            test: /\.html$/,
+            loader: 'html-loader'
+          },
+          {
+            test: /\.less$/,
+            loaders: ['style-loader', {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                indent: 'poscss',
+                plugins: (loader) => [
+                  require('postcss-import')({root: loader.resourcePath}),
+                  require('autoprefixer')({
+                    broswer: ['last 5 versions']
+                  })
+                ]
+              }
+            }, 'less-loader']
+          },
+          {
+            test: /\.(png|jpe?g|gif|svg)$/i,
+            loaders: [
+              'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
+              'image-webpack-loader'
+            ]
+          },
+          {
+            test: /\.vue$/,
+            loader: 'vue-loader'
+          }
+        ],
+      },
+      resolve: {
+        alias: {
+          vue: 'vue/dist/vue.js'
+        },
+        extensions: ['.ts', '.vue', '.js']
+      },
+      plugins: [
+        new htmlWebpackPlugin({
+          filename: 'index.html',
+          template: './test/demo/index.ejs',
+          inject: 'body',
+          title: 'goddancer is awesome',
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            collapseInlineTagWhitespace: true,
+          }
+        }),
+        new uglify({
+          extractComments: true
+        })
+      ]
+    }))
+    .pipe(gulp.dest('./test/demo/dist/'));
+});
 ```
 ---
 https://github.com/gulpjs/gulp-util
