@@ -2,6 +2,9 @@ import {HttpUtil} from '../../../library/js/utils/httpUtil';
 import '../css/index.scss';
 import '../component/layer.html';
 import '../css/index.less';
+import $ from 'jquery';
+import Vue from 'vue';
+import SlideBarrage from '../../../library/components/slideBarrage/sildeBarrage';
 
 function hello(){
   const time = new Date().getHours();
@@ -14,3 +17,17 @@ hello();
 // const newUrl = HttpUtil.updateParam(window.location.url, 'goddancer', 123);
 const name = HttpUtil.getParam('name');
 console.log(name);
+console.log($(document).height());
+
+const mainVue = new Vue({
+  el: '#app',
+  data: {},
+  comonents: {
+    SlideBarrage
+  },
+  methods: {
+    show: function(str){
+      console.log(str);
+    }
+  }
+});

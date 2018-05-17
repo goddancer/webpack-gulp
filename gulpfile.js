@@ -67,8 +67,18 @@ gulp.task('default', function() {
               'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
               'image-webpack-loader'
             ]
+          },
+          {
+            test: /\.vue$/,
+            loader: 'vue-loader'
           }
         ],
+      },
+      resolve: {
+        alias: {
+          vue: 'vue/dist/vue.js'
+        },
+        extensions: ['.ts', '.vue', '.js']
       },
       plugins: [
         new htmlWebpackPlugin({

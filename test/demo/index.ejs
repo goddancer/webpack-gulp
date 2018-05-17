@@ -7,12 +7,12 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-control" content="no-cache">
   <meta http-equiv="Cache" content="no-cache">
-  <title><%= htmlWebpackPlugin.options.title %>></title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
 <div id="app">
-  <div><img src="${require('./img/boy.jpg')}" alt=""></div>
-  <div><img src="${require('./img/cat.jpg')}" alt=""></div>
+  <div style="flex: 1;" @click="show('hello')"><img src="${require('./img/boy.jpg')}" alt=""></div>
+  <div style="flex: 1;"><img src="${require('./img/cat.jpg')}" alt=""></div>
 </div>
 <script>
   document.documentElement.style.fontSize = document.documentElement.clientWidth / 18.75 + 'px';
