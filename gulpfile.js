@@ -88,7 +88,7 @@ gulp.task('default', function() {
           {
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel-loader',
+            loader: 'babel-loader', // https://github.com/webpack-contrib/eslint-loader
             options: {
               "presets": ['env']
             }
