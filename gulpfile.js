@@ -1,7 +1,9 @@
 const gulp = require('gulp');
+const path = require('path');
 const webpack = require('webpack-stream');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const uglify = require('uglifyjs-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 gulp.task('default', function() {
   return gulp.src('src/entry.js')
@@ -19,10 +21,14 @@ gulp.task('default', function() {
         loaders: [
           {
             test: /\.css$/,
-            loaders: ['style-loader', {
+            include: [
+              path.join(__dirname, 'test/demo/css/')
+            ],
+            loader: ExtractTextPlugin.extract([{
               loader: 'css-loader',
               options: {
-                minimize: true
+                url: false,
+                // minimize: true
               }
             }, {
               loader: 'postcss-loader',
@@ -35,14 +41,15 @@ gulp.task('default', function() {
                   })
                 ]
               }
-            }]
+            }])
           },
           {
             test: /\.scss$/,
-            loaders: ['style-loader', {
+            loader: ExtractTextPlugin.extract([{
               loader: 'css-loader',
               options: {
-                minimize: true
+                url: false,
+                // minimize: true
               }
             }, {
               loader: 'postcss-loader',
@@ -55,7 +62,28 @@ gulp.task('default', function() {
                   })
                 ]
               }
-            }, 'sass-loader']
+            }, 'sass-loader'])
+          },
+          {
+            test: /\.less$/,
+            loader: ExtractTextPlugin.extract([{
+              loader: 'css-loader',
+              options: {
+                url: false,
+                // minimize: true
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                indent: 'poscss',
+                plugins: (loader) => [
+                  require('postcss-import')({root: loader.resourcePath}),
+                  require('autoprefixer')({
+                    broswer: ['last 5 versions']
+                  })
+                ]
+              }
+            }, 'less-loader'])
           },
           {
             test: /\.js$/,
@@ -70,41 +98,84 @@ gulp.task('default', function() {
             loader: 'html-loader'
           },
           {
-            test: /\.less$/,
-            loaders: ['style-loader', {
-              loader: 'css-loader',
-              options: {
-                minimize: true
-              }
-            }, {
-              loader: 'postcss-loader',
-              options: {
-                indent: 'poscss',
-                plugins: (loader) => [
-                  require('postcss-import')({root: loader.resourcePath}),
-                  require('autoprefixer')({
-                    broswer: ['last 5 versions']
-                  })
-                ]
-              }
-            }, 'less-loader']
-          },
-          {
             test: /\.(png|jpe?g|gif|svg)$/i,
             loaders: [
-              'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
+              // 'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
+              'url-loader?limit=20000&name=img/[name].[ext]',
               'image-webpack-loader'
             ]
           },
           {
             test: /\.vue$/,
-            loader: 'vue-loader'
+            loader: 'vue-loader',
+            options: {
+              loaders: {
+                // html: 'html-loader',
+                // js: 'babel-loader',
+                css: ExtractTextPlugin.extract([{
+                  loader: 'css-loader',
+                  options: {
+                    url: false,
+                    // minimize: true
+                  }
+                }, {
+                  loader: 'postcss-loader',
+                  options: {
+                    indent: 'poscss',
+                    plugins: (loader) => [
+                      require('postcss-import')({root: loader.resourcePath}),
+                      require('autoprefixer')({
+                        broswer: ['last 5 versions']
+                      })
+                    ]
+                  }
+                }]),
+                scss: ExtractTextPlugin.extract([{
+                  loader: 'css-loader',
+                  options: {
+                    url: false,
+                    // minimize: true
+                  }
+                }, {
+                  loader: 'postcss-loader',
+                  options: {
+                    indent: 'poscss',
+                    plugins: (loader) => [
+                      require('postcss-import')({root: loader.resourcePath}),
+                      require('autoprefixer')({
+                        broswer: ['last 5 versions']
+                      })
+                    ]
+                  }
+                }, 'sass-loader']),
+                less: ExtractTextPlugin.extract([{
+                  loader: 'css-loader',
+                  options: {
+                    url: false,
+                    // minimize: true
+                  }
+                }, {
+                  loader: 'postcss-loader',
+                  options: {
+                    indent: 'poscss',
+                    plugins: (loader) => [
+                      require('postcss-import')({root: loader.resourcePath}),
+                      require('autoprefixer')({
+                        broswer: ['last 5 versions']
+                      })
+                    ]
+                  }
+                }, 'less-loader'])
+              }
+            }
           }
         ],
       },
       resolve: {
         alias: {
-          vue: 'vue/dist/vue.js'
+          vue: 'vue/dist/vue.js',
+          eslint: 'eslint/bin/eslint.js',
+          'eslint-loader': 'eslint-loader/index.js'
         },
         extensions: ['.ts', '.vue', '.js']
       },
@@ -122,6 +193,9 @@ gulp.task('default', function() {
         }),
         new uglify({
           extractComments: true
+        }),
+        new ExtractTextPlugin({
+          filename: 'css/[name].css',
         })
       ]
     }))

@@ -1,0 +1,77 @@
+@charset "UTF-8";
+/*这里是scss开始*/
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0; }
+div {
+  display: -ms-flexbox;
+  display: flex;
+  font-weight: bold;
+  background: url("../img/bg.jpg") no-repeat center top; }
+/*这里是scss结束*/
+/*index.less开始*/
+body {
+  width: 100%;
+  height: 100%;
+  font-size: 1rem;
+  background: url("../img/bg.jpg") no-repeat center top;
+}
+div {
+  display: -ms-flexbox;
+  display: flex;
+}
+/*index.less结束*/
+/*base.css开始*/
+html, body, p,span, div, a, ul,ol,li, h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+*{
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+a{
+  text-decoration: none;
+}
+li{
+  list-style: none;
+  background: url("../img/bg.jpg") no-repeat center top;
+}
+img{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+a:link{
+  color: #000;
+}
+a:visited{
+  color: #000;
+}
+.clear:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+/*base.css结束*/
+@charset "UTF-8";
+/*这里vue-scss.css开始*/
+#test {
+  width: 100px;
+  height: 300px;
+  background: url("../img/bg.jpg") no-repeat center top/100% 100%;
+}
+#test img {
+    display: block;
+    width: 100px;
+    height: 100px;
+}
+
+/*这里vue-scss.css结束*/

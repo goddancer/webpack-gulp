@@ -6,6 +6,7 @@ import $ from 'jquery';
 import Vue from 'vue';
 import SlideBarrage from '../../../library/components/slideBarrage/sildeBarrage';
 import '../css/base.css';
+import Test from '../component/test';
 
 function hello(){
   const time = new Date().getHours();
@@ -23,8 +24,9 @@ console.log($(document).height());
 const mainVue = new Vue({
   el: '#app',
   data: {},
-  comonents: {
-    SlideBarrage
+  components: {
+    SlideBarrage,
+    test: Test
   },
   methods: {
     show: function(str){

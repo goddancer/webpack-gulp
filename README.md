@@ -146,6 +146,10 @@ resolve: {
     extensions: ['.ts', '.vue', '.js'] // 指定解析拓展
 }
 ```
+vue-loader中配置scss支持，[参考](https://github.com/vuejs/vue-loader/issues/363)
+```
+
+```
 ### 3、plugins
 #### html-webpack-plugin
 实现：
@@ -187,6 +191,59 @@ plugins: [
       extractComments: true // 删除注释
     })
 ]
+```
+#### extract-text-webpack-plugin
+把css和js打包在一起，减少实际请求的次数，但是由于编译出来的js文件比较大，浪费带宽。因此，我们使用extract-text-webpack-plugin插件，把css文件编译成独立的文件。我们就可以利用CDN把这个文件推送到节点服务器，或者根据视情况按需加载，进而优化客户请求链路，加速页面响应。
+
+[参考帖子](https://juejin.im/post/5a4eb795f265da3e52344c94)
+
+[以原路径解析](https://github.com/webpack-contrib/extract-text-webpack-plugin/blob/master/README.md)
+```
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+{
+    test: /\.css$/,
+    include: [
+      path.join(__dirname, 'test/demo/css/')
+    ],
+    use: ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: 'css-loader'
+    })
+}
+
+plugins: [
+    new ExtractTextPlugin({
+      filename: 'css/[name].css'
+    })
+]
+```
+```
+{
+    test: /\.css$/,
+    include: [
+      path.join(__dirname, 'test/demo/css/')
+    ],
+    loader: ExtractTextPlugin.extract([{
+      loader: 'css-loader',
+      options: {
+        url: false, // 以原路径解析
+        minimize: true
+      }
+    }, {
+      loader: 'postcss-loader',
+      options: {
+        indent: 'poscss',
+        plugins: (loader) => [
+          require('postcss-import')({root: loader.resourcePath}),
+          require('autoprefixer')({
+            broswer: ['last 5 versions']
+          })
+        ]
+      }
+    }])
+}
 ```
 ### 4、创建gulpfile.js并初始化
 ```
