@@ -183,8 +183,9 @@ gulp.task('default', function() {
         new htmlWebpackPlugin({
           filename: 'index.html',
           template: './test/demo/index.ejs',
-          inject: 'body',
+          inject: false,
           title: 'goddancer is awesome',
+          publishTime: new Date().format(),
           minify: {
             removeComments: true,
             collapseWhitespace: true,
@@ -201,3 +202,22 @@ gulp.task('default', function() {
     }))
     .pipe(gulp.dest('./test/demo/dist/'));
 });
+Date.prototype.format = function(){
+  const time = new Date();
+  const year = time.getFullYear();
+  const month = time.getMonth()+1;
+  const day = time.getDay();
+  const hour = time.getHours();
+  const minute = time.getMinutes();
+  const second = time.getSeconds();
+
+  return ''+year+addZero(month)+addZero(day)+addZero(hour)+addZero(minute)+addZero(second);
+
+  function addZero(time){
+    if(time <= 9){
+      return '0'+time;
+    }else{
+      return time;
+    }
+  }
+};

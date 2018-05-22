@@ -7,10 +7,11 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-control" content="no-cache">
   <meta http-equiv="Cache" content="no-cache">
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.app.css[0] %>?<%= htmlWebpackPlugin.options.publishTime %>">
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
-<div id="app">
+<div id="app"><!--?<%= htmlWebpackPlugin.options.publishTime %>-->
   <div style="flex: 1;" @click="show('hello')"><img src="${require('./img/boy.jpg')}" alt=""></div>
   <div style="flex: 1;"><img src="${require('./img/cat.jpg')}" alt=""></div>
   <test></test>
@@ -19,9 +20,10 @@
   document.documentElement.style.fontSize = document.documentElement.clientWidth / 18.75 + 'px';
   window.onresize = function () {
     document.documentElement.style.fontSize = document.documentElement.clientWidth / 18.75 + 'px';
-  }
+  };
+  <%= JSON.stringify(htmlWebpackPlugin.files.chunks) %>
 </script>
-<!-- Gridsum tracking code begin. -->
+<script type='text/javascript' src="<%= htmlWebpackPlugin.files.chunks.app.entry %>?<%= htmlWebpackPlugin.options.publishTime %>"></script>
 <script type='text/javascript'>
   var _gsq = _gsq || [];
   (function () {
@@ -32,10 +34,7 @@
     var firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
   })();
-</script>
-<!--Gridsum tracking code end. -->
-<!--baidu tracking code begin. -->
-<script type='text/javascript'>
+
   var _hmt = _hmt || [];
   (function () {
     var hm = document.createElement("script");
@@ -44,6 +43,5 @@
     s.parentNode.insertBefore(hm, s);
   })();
 </script>
-<!--baidu tracking code end. -->
 </body>
 </html>
