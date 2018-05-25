@@ -16,7 +16,7 @@ function hello(){
 }
 hello();
 
-// const newUrl = HttpUtil.updateParam(window.location.url, 'goddancer', 123);
+const newUrl = HttpUtil.updateParam(window.location.url, 'goddancer', 123);
 const name = HttpUtil.getParam('name');
 console.log(name);
 console.log($(document).height());

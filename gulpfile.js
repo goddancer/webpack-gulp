@@ -1,207 +1,13 @@
+/*const gulpTask = require('zjc-npm-test');
+gulpTask('hhh');*/
 const gulp = require('gulp');
 const path = require('path');
+const _ = require('lodash');
 const webpack = require('webpack-stream');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const uglify = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-gulp.task('default', function() {
-  return gulp.src('src/entry.js')
-    .pipe(webpack({
-      watch: false,
-      entry: {
-        app: './test/demo/js/main.js',
-        // test: 'test/test.js',
-      },
-      output: {
-        filename: 'js/[name].js',
-        publicPath: './'
-      },
-      module: {
-        loaders: [
-          {
-            test: /\.css$/,
-            include: [
-              path.join(__dirname, 'test/demo/css/')
-            ],
-            loader: ExtractTextPlugin.extract([{
-              loader: 'css-loader',
-              options: {
-                url: false,
-                // minimize: true
-              }
-            }, {
-              loader: 'postcss-loader',
-              options: {
-                indent: 'poscss',
-                plugins: (loader) => [
-                  require('postcss-import')({root: loader.resourcePath}),
-                  require('autoprefixer')({
-                    broswer: ['last 5 versions']
-                  })
-                ]
-              }
-            }])
-          },
-          {
-            test: /\.scss$/,
-            loader: ExtractTextPlugin.extract([{
-              loader: 'css-loader',
-              options: {
-                url: false,
-                // minimize: true
-              }
-            }, {
-              loader: 'postcss-loader',
-              options: {
-                indent: 'poscss',
-                plugins: (loader) => [
-                  require('postcss-import')({root: loader.resourcePath}),
-                  require('autoprefixer')({
-                    broswer: ['last 5 versions']
-                  })
-                ]
-              }
-            }, 'sass-loader'])
-          },
-          {
-            test: /\.less$/,
-            loader: ExtractTextPlugin.extract([{
-              loader: 'css-loader',
-              options: {
-                url: false,
-                // minimize: true
-              }
-            }, {
-              loader: 'postcss-loader',
-              options: {
-                indent: 'poscss',
-                plugins: (loader) => [
-                  require('postcss-import')({root: loader.resourcePath}),
-                  require('autoprefixer')({
-                    broswer: ['last 5 versions']
-                  })
-                ]
-              }
-            }, 'less-loader'])
-          },
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader', // https://github.com/webpack-contrib/eslint-loader
-            options: {
-              "presets": ['env']
-            }
-          },
-          {
-            test: /\.html$/,
-            loader: 'html-loader'
-          },
-          {
-            test: /\.(png|jpe?g|gif|svg)$/i,
-            loaders: [
-              // 'url-loader?limit=20000&name=img/[name]-[hash:5].[ext]',
-              'url-loader?limit=20000&name=img/[name].[ext]',
-              'image-webpack-loader'
-            ]
-          },
-          {
-            test: /\.vue$/,
-            loader: 'vue-loader',
-            options: {
-              loaders: {
-                // html: 'html-loader',
-                // js: 'babel-loader',
-                css: ExtractTextPlugin.extract([{
-                  loader: 'css-loader',
-                  options: {
-                    url: false,
-                    // minimize: true
-                  }
-                }, {
-                  loader: 'postcss-loader',
-                  options: {
-                    indent: 'poscss',
-                    plugins: (loader) => [
-                      require('postcss-import')({root: loader.resourcePath}),
-                      require('autoprefixer')({
-                        broswer: ['last 5 versions']
-                      })
-                    ]
-                  }
-                }]),
-                scss: ExtractTextPlugin.extract([{
-                  loader: 'css-loader',
-                  options: {
-                    url: false,
-                    // minimize: true
-                  }
-                }, {
-                  loader: 'postcss-loader',
-                  options: {
-                    indent: 'poscss',
-                    plugins: (loader) => [
-                      require('postcss-import')({root: loader.resourcePath}),
-                      require('autoprefixer')({
-                        broswer: ['last 5 versions']
-                      })
-                    ]
-                  }
-                }, 'sass-loader']),
-                less: ExtractTextPlugin.extract([{
-                  loader: 'css-loader',
-                  options: {
-                    url: false,
-                    // minimize: true
-                  }
-                }, {
-                  loader: 'postcss-loader',
-                  options: {
-                    indent: 'poscss',
-                    plugins: (loader) => [
-                      require('postcss-import')({root: loader.resourcePath}),
-                      require('autoprefixer')({
-                        broswer: ['last 5 versions']
-                      })
-                    ]
-                  }
-                }, 'less-loader'])
-              }
-            }
-          }
-        ],
-      },
-      resolve: {
-        alias: {
-          vue: 'vue/dist/vue.js',
-          eslint: 'eslint/bin/eslint.js',
-          'eslint-loader': 'eslint-loader/index.js'
-        },
-        extensions: ['.ts', '.vue', '.js']
-      },
-      plugins: [
-        new htmlWebpackPlugin({
-          filename: 'index.html',
-          template: './test/demo/index.ejs',
-          inject: false,
-          title: 'goddancer is awesome',
-          publishTime: new Date().format(),
-          minify: {
-            removeComments: true,
-            collapseWhitespace: true,
-            collapseInlineTagWhitespace: true,
-          }
-        }),
-        new uglify({
-          extractComments: true
-        }),
-        new ExtractTextPlugin({
-          filename: 'css/[name].css',
-        })
-      ]
-    }))
-    .pipe(gulp.dest('./test/demo/dist/'));
-});
 Date.prototype.format = function(){
   const time = new Date();
   const year = time.getFullYear();
@@ -221,3 +27,230 @@ Date.prototype.format = function(){
     }
   }
 };
+function gulpTask(options){
+  const taskOptions = _.extend({
+    taskName: 'default',
+    taskWatch: false,
+    taskEntry: './test/demo/js/main.js',
+    taskDist: './test/demo/dist/',
+    taskOutput: {
+      jsFilename: 'js/[name].js',
+      cssFilename: 'css/[name].css',
+      imgFilename: 'img/[name].[ext]',
+      publicPath: './'
+    },
+    taskMinimize: {
+      css: false,
+      js: false,
+      html: false,
+      img: '2000',
+      comments: true
+    },
+    taskTransUrl: false,
+    taskHtmlWebpackPlugin: {
+      filename: 'index.html',
+      template: './test/demo/index.html',
+      inject: false,
+      title: 'this is awesome',
+      publishTime: new Date().format()
+    },
+  }, options);
+  gulp.task(taskOptions.taskName, function() {
+    return gulp.src('src/entry.js')
+      .pipe(webpack({
+        watch: false,
+        entry: {
+          app: taskOptions.taskEntry,
+        },
+        output: {
+          filename: taskOptions.taskOutput.jsFilename,
+          publicPath: taskOptions.taskOutput.publicPath
+        },
+        module: {
+          loaders: [
+            {
+              test: /\.css$/,
+              include: [
+                path.join(__dirname, 'test/demo/css/')
+              ],
+              loader: ExtractTextPlugin.extract([{
+                loader: 'css-loader',
+                options: {
+                  url: taskOptions.taskTransUrl,
+                  minimize: taskOptions.taskMinimize.css
+                }
+              }, {
+                loader: 'postcss-loader',
+                options: {
+                  indent: 'poscss',
+                  plugins: (loader) => [
+                    require('postcss-import')({root: loader.resourcePath}),
+                    require('autoprefixer')({
+                      broswer: ['last 5 versions']
+                    })
+                  ]
+                }
+              }])
+            },
+            {
+              test: /\.scss$/,
+              loader: ExtractTextPlugin.extract([{
+                loader: 'css-loader',
+                options: {
+                  url: taskOptions.taskTransUrl,
+                  minimize: taskOptions.taskMinimize.css
+                }
+              }, {
+                loader: 'postcss-loader',
+                options: {
+                  indent: 'poscss',
+                  plugins: (loader) => [
+                    require('postcss-import')({root: loader.resourcePath}),
+                    require('autoprefixer')({
+                      broswer: ['last 5 versions']
+                    })
+                  ]
+                }
+              }, 'sass-loader'])
+            },
+            {
+              test: /\.less$/,
+              loader: ExtractTextPlugin.extract([{
+                loader: 'css-loader',
+                options: {
+                  url: taskOptions.taskTransUrl,
+                  minimize: taskOptions.taskMinimize.css
+                }
+              }, {
+                loader: 'postcss-loader',
+                options: {
+                  indent: 'poscss',
+                  plugins: (loader) => [
+                    require('postcss-import')({root: loader.resourcePath}),
+                    require('autoprefixer')({
+                      broswer: ['last 5 versions']
+                    })
+                  ]
+                }
+              }, 'less-loader'])
+            },
+            {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              loader: 'babel-loader',
+              options: {
+                "presets": ['env']
+              }
+            },
+            {
+              test: /\.html$/,
+              loader: 'html-loader'
+            },
+            {
+              test: /\.(png|jpe?g|gif|svg)$/i,
+              loaders: [
+                'url-loader?limit='+taskOptions.taskMinimize.img+'&name='+taskOptions.taskOutput.imgFilename+'',
+                'image-webpack-loader'
+              ]
+            },
+            {
+              test: /\.vue$/,
+              loader: 'vue-loader',
+              options: {
+                loaders: {
+                  css: ExtractTextPlugin.extract([{
+                    loader: 'css-loader',
+                    options: {
+                      url: taskOptions.taskTransUrl,
+                      minimize: taskOptions.taskMinimize.css
+                    }
+                  }, {
+                    loader: 'postcss-loader',
+                    options: {
+                      indent: 'poscss',
+                      plugins: (loader) => [
+                        require('postcss-import')({root: loader.resourcePath}),
+                        require('autoprefixer')({
+                          broswer: ['last 5 versions']
+                        })
+                      ]
+                    }
+                  }]),
+                  scss: ExtractTextPlugin.extract([{
+                    loader: 'css-loader',
+                    options: {
+                      url: taskOptions.taskTransUrl,
+                      minimize: taskOptions.taskMinimize.css
+                    }
+                  }, {
+                    loader: 'postcss-loader',
+                    options: {
+                      indent: 'poscss',
+                      plugins: (loader) => [
+                        require('postcss-import')({root: loader.resourcePath}),
+                        require('autoprefixer')({
+                          broswer: ['last 5 versions']
+                        })
+                      ]
+                    }
+                  }, 'sass-loader']),
+                  less: ExtractTextPlugin.extract([{
+                    loader: 'css-loader',
+                    options: {
+                      url: taskOptions.taskTransUrl,
+                      minimize: taskOptions.taskMinimize.css
+                    }
+                  }, {
+                    loader: 'postcss-loader',
+                    options: {
+                      indent: 'poscss',
+                      plugins: (loader) => [
+                        require('postcss-import')({root: loader.resourcePath}),
+                        require('autoprefixer')({
+                          broswer: ['last 5 versions']
+                        })
+                      ]
+                    }
+                  }, 'less-loader'])
+                }
+              }
+            }
+          ],
+        },
+        resolve: {
+          alias: {
+            vue: 'vue/dist/vue.js'
+          },
+          extensions: ['.ts', '.vue', '.js']
+        },
+        plugins: [
+          new htmlWebpackPlugin(_.extend({
+            filename: 'index.html',
+            template: './test/demo/index.ejs',
+            inject: false,
+            title: 'this is awesome',
+            publishTime: new Date().format(),
+            minify: {
+              removeComments: taskOptions.taskMinimize.comments,
+              collapseWhitespace: taskOptions.taskMinimize.html,
+              collapseInlineTagWhitespace: taskOptions.taskMinimize.html,
+            }
+          },taskOptions.taskHtmlWebpackPlugin)),
+          new uglify({
+            extractComments: true
+          }),
+          new ExtractTextPlugin({
+            filename: taskOptions.taskOutput.cssFilename,
+          })
+        ]
+      }))
+      .pipe(gulp.dest(taskOptions.taskDist));
+  });
+}
+gulpTask({
+  taskName: 'new',
+  taskMinimize: {
+    css: true,
+    img: '18000'
+  }
+});
