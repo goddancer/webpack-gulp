@@ -38,6 +38,6 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.6.0",
     "webpack-stream": "^4.0.3",
-    "zjc-npm-test": "^1.0.6"
+    "zjc-npm-test": "^1.0.9"
   }
 }
