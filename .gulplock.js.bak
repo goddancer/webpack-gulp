@@ -29,13 +29,9 @@ module.exports = function(options){
   const taskOptions = _.extend({
     taskName: 'default',
     taskWatch: false,
-    taskHtmlEntry: './test/demo/index.html',
-    taskJsEntry: './test/demo/js/main.js',
-    taskCssEntry: './test/demo/css/',
+    taskEntry: './test/demo/js/main.js',
     taskDist: './test/demo/dist/',
-    inject: false,
     taskOutput: {
-      htmlFilename: 'index.html',
       jsFilename: 'js/[name].js',
       cssFilename: 'css/[name].css',
       imgFilename: 'img/[name].[ext]',
@@ -44,17 +40,24 @@ module.exports = function(options){
     taskMinimize: {
       css: true,
       html: true,
-      img: '10000',
+      img: '20000',
       comments: true
     },
-    taskTransUrl: false
+    taskTransUrl: false,
+    taskHtmlWebpackPlugin: {
+      filename: 'index.html',
+      template: './test/demo/index.ejs',
+      inject: false,
+      title: 'this is awesome',
+      publishTime: new Date().format()
+    },
   }, options);
   gulp.task(taskOptions.taskName, function() {
     return gulp.src('src/entry.js')
       .pipe(webpack({
-        watch: taskOptions.taskWatch,
+        watch: false,
         entry: {
-          app: taskOptions.taskJsEntry,
+          app: taskOptions.taskEntry,
         },
         output: {
           filename: taskOptions.taskOutput.jsFilename,
@@ -65,7 +68,7 @@ module.exports = function(options){
             {
               test: /\.css$/,
               include: [
-                path.join(__dirname, taskOptions.taskCssEntry)
+                path.join(__dirname, 'test/demo/css/')
               ],
               loader: ExtractTextPlugin.extract([{
                 loader: 'css-loader',
@@ -80,8 +83,7 @@ module.exports = function(options){
                   plugins: (loader) => [
                     require('postcss-import')({root: loader.resourcePath}),
                     require('autoprefixer')({
-                      broswer: ['last 5 versions'],
-                      remove: false
+                      broswer: ['last 5 versions']
                     })
                   ]
                 }
@@ -102,8 +104,7 @@ module.exports = function(options){
                   plugins: (loader) => [
                     require('postcss-import')({root: loader.resourcePath}),
                     require('autoprefixer')({
-                      broswer: ['last 5 versions'],
-                      remove: false
+                      broswer: ['last 5 versions']
                     })
                   ]
                 }
@@ -124,8 +125,7 @@ module.exports = function(options){
                   plugins: (loader) => [
                     require('postcss-import')({root: loader.resourcePath}),
                     require('autoprefixer')({
-                      broswer: ['last 5 versions'],
-                      remove: false
+                      broswer: ['last 5 versions']
                     })
                   ]
                 }
@@ -141,8 +141,7 @@ module.exports = function(options){
             },
             {
               test: /\.html$/,
-              loader: 'html-loader',
-              exclude: /index\.html/
+              loader: 'html-loader'
             },
             {
               test: /\.(png|jpe?g|gif|svg)$/i,
@@ -169,8 +168,7 @@ module.exports = function(options){
                       plugins: (loader) => [
                         require('postcss-import')({root: loader.resourcePath}),
                         require('autoprefixer')({
-                          broswer: ['last 5 versions'],
-                          remove: false
+                          broswer: ['last 5 versions']
                         })
                       ]
                     }
@@ -188,8 +186,7 @@ module.exports = function(options){
                       plugins: (loader) => [
                         require('postcss-import')({root: loader.resourcePath}),
                         require('autoprefixer')({
-                          broswer: ['last 5 versions'],
-                          remove: false
+                          broswer: ['last 5 versions']
                         })
                       ]
                     }
@@ -207,8 +204,7 @@ module.exports = function(options){
                       plugins: (loader) => [
                         require('postcss-import')({root: loader.resourcePath}),
                         require('autoprefixer')({
-                          broswer: ['last 5 versions'],
-                          remove: false
+                          broswer: ['last 5 versions']
                         })
                       ]
                     }
@@ -225,10 +221,10 @@ module.exports = function(options){
           extensions: ['.ts', '.vue', '.js']
         },
         plugins: [
-          new htmlWebpackPlugin({
-            filename: taskOptions.taskOutput.htmlFilename,
-            template: taskOptions.taskHtmlEntry,
-            inject: taskOptions.inject,
+          new htmlWebpackPlugin(_.extend({
+            filename: 'index.html',
+            template: './test/demo/index.ejs',
+            inject: false,
             title: 'this is awesome',
             publishTime: new Date().format(),
             minify: {
@@ -236,7 +232,7 @@ module.exports = function(options){
               collapseWhitespace: taskOptions.taskMinimize.html,
               collapseInlineTagWhitespace: taskOptions.taskMinimize.html
             }
-          }),
+          },taskOptions.taskHtmlWebpackPlugin)),
           new uglify({
             extractComments: true
           }),
